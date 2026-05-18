@@ -1,0 +1,11 @@
+.DS_Store
+
+# Local planning/source notes that should not be published in the public site repo.
+Case_Studies/
+About_Page/
+Homepage_Copy/
+Screenshots/
+Site_Content/
+TODO.md
+LAUNCH_REVIEW_NOTES.md
+PORTFOLIO_REVIEW_NOTES.md
