@@ -6,23 +6,29 @@
   <title>Inside AI | Interactive Learning Experience</title>
   <style>
     :root {
-      --bg: #080b12;
-      --bg-soft: #101522;
-      --panel: rgba(255, 255, 255, 0.06);
-      --panel-strong: rgba(255, 255, 255, 0.1);
-      --text: #f5f7fb;
-      --muted: #aab3c5;
-      --line: rgba(255, 255, 255, 0.16);
-      --accent: #9f7aea;
-      --accent-2: #4fd1c5;
-      --accent-3: #f6ad55;
-      --good: #68d391;
-      --warn: #fbd38d;
-      --bad: #fc8181;
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --bg: #F7F3EB;
+      --bg-soft: #EFE8DB;
+      --surface: #FBF8F2;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --text: #24313E;
+      --muted: #667383;
+      --line: rgba(36,49,62,.08);
+      --primary: #5D8AA8;
+      --secondary: #D6A56F;
+      --tertiary: #7F9D7A;
+      --highlight: #EAD7A4;
+      --accent: var(--primary);
+      --accent-2: var(--tertiary);
+      --accent-3: var(--secondary);
+      --good: #7F9D7A;
+      --warn: #D6A56F;
+      --bad: #B6786F;
+      --shadow: 0 20px 50px rgba(20,20,20,.05);
       --radius: 24px;
       --max: 1120px;
-      --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --heading-font: "Fraunces", Georgia, "Times New Roman", serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; background: var(--bg); }
@@ -31,111 +37,121 @@
       font-family: var(--font);
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(159, 122, 234, 0.22), transparent 32rem),
-        radial-gradient(circle at 85% 20%, rgba(79, 209, 197, 0.16), transparent 30rem),
-        linear-gradient(180deg, #080b12 0%, #0c101a 45%, #080b12 100%);
+        radial-gradient(circle at top left, rgba(234, 215, 164, 0.42), transparent 34rem),
+        radial-gradient(circle at 85% 20%, rgba(127, 157, 122, 0.18), transparent 30rem),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 48%, var(--bg) 100%);
       line-height: 1.6;
     }
     a { color: inherit; }
     .skip-link { position: absolute; top: -40px; left: 1rem; background: var(--text); color: var(--bg); padding: 0.5rem 0.75rem; border-radius: 999px; z-index: 20; }
     .skip-link:focus { top: 1rem; }
-    .site-nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(20px); background: rgba(8, 11, 18, 0.72); border-bottom: 1px solid var(--line); }
+    .site-nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); background: rgba(247, 243, 235, 0.86); border-bottom: 1px solid var(--line); }
     .nav-inner { max-width: var(--max); margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .brand { font-weight: 800; letter-spacing: -0.03em; display: flex; align-items: center; gap: 0.55rem; white-space: nowrap; }
-    .brand-mark { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 30px rgba(159, 122, 234, 0.45); }
+    .brand { font-weight: 700; letter-spacing: 0; display: flex; align-items: center; gap: 0.55rem; white-space: nowrap; }
+    .brand-mark { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--highlight), var(--secondary)); border: 1px solid rgba(36,49,62,.1); }
     .nav-links { display: flex; gap: 0.8rem; font-size: 0.9rem; color: var(--muted); flex-wrap: wrap; justify-content: flex-end; }
     .nav-links a { text-decoration: none; border: 1px solid transparent; padding: 0.35rem 0.6rem; border-radius: 999px; }
     .nav-links a:hover, .nav-links a:focus { color: var(--text); border-color: var(--line); background: var(--panel); outline: none; }
-    section { min-height: 100vh; padding: 7rem 1.25rem; display: grid; align-items: center; }
+    section { min-height: 100vh; padding: 8rem 1.25rem; display: grid; align-items: center; }
     .section-inner { width: 100%; max-width: var(--max); margin: 0 auto; }
-    .eyebrow { display: inline-flex; gap: 0.5rem; align-items: center; color: var(--accent-2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.11em; font-size: 0.78rem; margin-bottom: 1rem; }
+    .eyebrow { display: inline-flex; gap: 0.5rem; align-items: center; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; margin-bottom: 1rem; }
     .eyebrow::before { content: ""; width: 36px; height: 1px; background: currentColor; opacity: 0.7; }
-    h1, h2, h3 { line-height: 1.05; letter-spacing: -0.055em; margin: 0; }
-    h1 { font-size: clamp(3.4rem, 9vw, 8rem); max-width: 980px; }
-    h2 { font-size: clamp(2.5rem, 6vw, 5.6rem); max-width: 960px; }
+    h1, h2, h3 { font-family: var(--heading-font); font-weight: 600; line-height: 1.05; letter-spacing: 0; margin: 0; }
+    h1 { font-size: clamp(3.2rem, 8vw, 7.4rem); max-width: 980px; }
+    h2 { font-size: clamp(2.35rem, 5.6vw, 5.2rem); max-width: 960px; }
     h3 { font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 0.75rem; }
     p { color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.2rem); max-width: 760px; }
-    .lead { font-size: clamp(1.2rem, 2.4vw, 1.6rem); color: #dbe3f4; margin-top: 1.4rem; }
+    .lead { font-size: clamp(1.2rem, 2.4vw, 1.6rem); color: #41505F; margin-top: 1.4rem; }
     .hero { position: relative; overflow: hidden; min-height: calc(100vh - 58px); }
-    .hero-grid, .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: center; }
-    .hero-card, .card, .glass { background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035)); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .hero-grid, .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.25rem; align-items: center; }
+    .hero-card, .card, .glass { background: var(--panel); border: 1px solid rgba(36,49,62,.08); border-radius: var(--radius); box-shadow: var(--shadow); }
     .hero-card { padding: 1.25rem; min-height: 420px; position: relative; overflow: hidden; }
     .card, .glass { padding: clamp(1.25rem, 3vw, 2rem); }
-    .orb { position: absolute; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.88), rgba(159,122,234,0.55) 28%, rgba(79,209,197,0.22) 55%, transparent 72%); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: breathe 5s ease-in-out infinite; }
-    .orbit { position: absolute; border: 1px solid rgba(255,255,255,0.18); border-radius: 50%; inset: 70px; animation: spin 18s linear infinite; }
-    .orbit:nth-child(2) { inset: 110px 50px; animation-duration: 24s; }
-    .orbit:nth-child(3) { inset: 40px 120px; animation-duration: 30s; }
-    .signal-dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 18px var(--accent-2); top: 12%; left: 50%; }
-    @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.85; } 50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .constellation { position: absolute; inset: 2.25rem; }
+    .constellation-line { position: absolute; height: 1px; background: rgba(36,49,62,.16); transform-origin: left center; animation: driftLine 18s ease-in-out infinite; }
+    .constellation-line:nth-child(1) { width: 38%; top: 24%; left: 18%; transform: rotate(18deg); }
+    .constellation-line:nth-child(2) { width: 31%; top: 42%; left: 38%; transform: rotate(-20deg); animation-delay: 1.4s; }
+    .constellation-line:nth-child(3) { width: 35%; top: 64%; left: 20%; transform: rotate(-8deg); animation-delay: 2.1s; }
+    .constellation-line:nth-child(4) { width: 28%; top: 34%; left: 58%; transform: rotate(62deg); animation-delay: 3.2s; }
+    .star-dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--surface); border: 1px solid rgba(36,49,62,.18); animation: driftDot 16s ease-in-out infinite; }
+    .star-dot::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--primary); opacity: .75; }
+    .star-dot:nth-of-type(5) { top: 20%; left: 17%; }
+    .star-dot:nth-of-type(6) { top: 31%; left: 50%; animation-delay: 1.2s; }
+    .star-dot:nth-of-type(7) { top: 44%; left: 38%; animation-delay: 2.4s; }
+    .star-dot:nth-of-type(8) { top: 57%; left: 70%; animation-delay: 1.8s; }
+    .star-dot:nth-of-type(9) { top: 67%; left: 22%; animation-delay: 3s; }
+    .star-dot:nth-of-type(10) { top: 74%; left: 58%; animation-delay: .8s; }
+    .constellation-note { position: absolute; right: 1.75rem; bottom: 1.5rem; max-width: 14rem; color: var(--muted); font-family: var(--heading-font); font-size: 1.15rem; line-height: 1.3; }
+    @keyframes driftDot { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5px, -7px); } }
+    @keyframes driftLine { 0%, 100% { opacity: .55; } 50% { opacity: .28; } }
     .scroll-cue { display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 2rem; color: var(--muted); font-size: 0.95rem; }
     .mouse { width: 24px; height: 38px; border: 1px solid var(--line); border-radius: 999px; position: relative; }
-    .mouse::after { content: ""; position: absolute; top: 8px; left: 50%; width: 4px; height: 4px; transform: translateX(-50%); background: var(--accent-2); border-radius: 50%; animation: scrollDot 1.7s ease-in-out infinite; }
-    @keyframes scrollDot { 0% { opacity: 0; transform: translate(-50%, 0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, 12px); } }
+    .mouse::after { content: ""; position: absolute; top: 8px; left: 50%; width: 4px; height: 4px; transform: translateX(-50%); background: var(--primary); border-radius: 50%; animation: scrollDot 2.4s ease-in-out infinite; }
+    @keyframes scrollDot { 0% { opacity: 0; transform: translate(-50%, 0); } 35% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, 12px); } }
     .layer-stack, .controls, .token-box { display: grid; gap: 1rem; margin-top: 1rem; }
     button { font: inherit; }
-    .layer-btn, .train-card, .builder-card, .word, .button, .role-card { cursor: pointer; transition: transform 160ms ease, border-color 160ms ease, background 160ms ease; }
-    .layer-btn { width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--text); border-radius: 18px; padding: 1rem; text-align: left; }
-    .layer-btn:hover, .layer-btn.active { transform: translateY(-2px); background: rgba(159, 122, 234, 0.18); border-color: rgba(159, 122, 234, 0.6); }
+    .layer-btn, .train-card, .builder-card, .word, .button, .role-card { cursor: pointer; transition: transform 220ms ease, border-color 220ms ease, background 220ms ease; }
+    .layer-btn { width: 100%; border: 1px solid var(--line); background: var(--panel-strong); color: var(--text); border-radius: 18px; padding: 1rem; text-align: left; }
+    .layer-btn:hover, .layer-btn.active { transform: translateY(-1px); background: rgba(234, 215, 164, 0.34); border-color: rgba(93, 138, 168, 0.42); }
     .layer-btn strong { display: block; font-size: 1.1rem; } .layer-btn span { display: block; color: var(--muted); font-size: 0.92rem; margin-top: 0.2rem; }
     .explain-box { min-height: 220px; display: grid; align-content: center; }
     .pill-row { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 1rem; }
-    .pill { border: 1px solid var(--line); background: rgba(255,255,255,0.05); border-radius: 999px; padding: 0.35rem 0.7rem; color: var(--muted); font-size: 0.86rem; }
+    .pill { border: 1px solid var(--line); background: rgba(251,248,242,.72); border-radius: 999px; padding: 0.35rem 0.7rem; color: var(--muted); font-size: 0.86rem; }
     .trainer-grid, .builder, .agent-loop, .role-grid { display: grid; gap: 1rem; margin-top: 1rem; }
     .trainer-grid, .builder, .agent-loop, .role-grid { grid-template-columns: repeat(4, 1fr); }
-    .train-card { min-height: 120px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,0.05); font-size: 2rem; }
-    .train-card:hover, .train-card.selected { transform: translateY(-3px); border-color: var(--accent-2); background: rgba(79,209,197,0.13); }
-    .meter { height: 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin: 1.2rem 0 0.6rem; }
-    .meter-fill { width: 18%; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 300ms ease; }
+    .train-card { min-height: 120px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 20px; background: var(--panel-strong); font-size: 2rem; }
+    .train-card:hover, .train-card.selected { transform: translateY(-2px); border-color: var(--tertiary); background: rgba(127,157,122,0.16); }
+    .meter { height: 14px; background: rgba(36,49,62,.06); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin: 1.2rem 0 0.6rem; }
+    .meter-fill { width: 18%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--tertiary)); transition: width 320ms ease; }
     .small-label { color: var(--muted); font-size: 0.92rem; }
     .network { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: center; justify-items: center; min-height: 300px; }
     .node-col { display: grid; gap: 1rem; }
-    .node { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--line); background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35), rgba(159,122,234,0.28)); box-shadow: 0 0 32px rgba(159,122,234,0.15); }
+    .node { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--line); background: radial-gradient(circle at 30% 25%, var(--highlight), rgba(93,138,168,0.24)); }
     .control label { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.95rem; }
     input[type="range"] { width: 100%; accent-color: var(--accent-2); }
-    .prediction, .system-status, .attention-output { margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.05); color: var(--muted); }
+    .prediction, .system-status, .attention-output { margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 18px; background: rgba(251,248,242,.78); color: var(--muted); }
     .sentence { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 1rem; }
-    .word { border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--text); padding: 0.55rem 0.85rem; border-radius: 999px; }
-    .word:hover, .word.active { background: rgba(79,209,197,0.16); border-color: var(--accent-2); }
-    .prompt-input { width: 100%; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.06); color: var(--text); padding: 1rem; font: inherit; font-size: 1rem; }
+    .word { border: 1px solid var(--line); background: var(--panel-strong); color: var(--text); padding: 0.55rem 0.85rem; border-radius: 999px; }
+    .word:hover, .word.active { background: rgba(127,157,122,0.16); border-color: var(--tertiary); }
+    .prompt-input { width: 100%; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--text); padding: 1rem; font: inherit; font-size: 1rem; }
     .token-suggestions { display: grid; gap: 0.7rem; }
-    .token-choice { border: 1px solid var(--line); border-radius: 18px; padding: 0.85rem 1rem; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
-    .prob { color: var(--accent-2); font-variant-numeric: tabular-nums; }
-    .builder-card, .role-card, .loop-step, .ba-card { border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,0.05); padding: 1rem; }
-    .builder-card.active { background: rgba(159,122,234,0.18); border-color: var(--accent); transform: translateY(-4px); }
-    .loop-step.active { border-color: var(--accent-2); background: rgba(79,209,197,0.15); }
-    .loop-num { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,0.1); margin-bottom: 0.8rem; font-weight: 800; }
+    .token-choice { border: 1px solid var(--line); border-radius: 18px; padding: 0.85rem 1rem; background: rgba(251,248,242,.78); display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .prob { color: var(--primary); font-variant-numeric: tabular-nums; }
+    .builder-card, .role-card, .loop-step, .ba-card { border: 1px solid var(--line); border-radius: 20px; background: var(--panel); padding: 1rem; box-shadow: var(--shadow); }
+    .builder-card.active { background: rgba(234,215,164,0.42); border-color: var(--primary); transform: translateY(-2px); }
+    .loop-step.active { border-color: var(--tertiary); background: rgba(127,157,122,0.14); }
+    .loop-num { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(234,215,164,0.46); margin-bottom: 0.8rem; font-weight: 800; }
     .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.2rem; }
-    .button { border: 1px solid var(--line); background: rgba(255,255,255,0.08); color: var(--text); padding: 0.75rem 1rem; border-radius: 999px; font-weight: 700; text-decoration: none; }
-    .button:hover, .button:focus { transform: translateY(-2px); background: rgba(79,209,197,0.14); border-color: var(--accent-2); outline: none; }
-    .button.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #071018; }
-    .role-card.active { border-color: var(--accent-3); background: rgba(246,173,85,0.14); }
+    .button { border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 0.75rem 1rem; border-radius: 999px; font-weight: 700; text-decoration: none; }
+    .button:hover, .button:focus { transform: translateY(-1px); background: rgba(234,215,164,0.34); border-color: var(--primary); outline: none; }
+    .button.primary { background: var(--primary); border-color: transparent; color: #fff; }
+    .role-card.active { border-color: var(--secondary); background: rgba(214,165,111,0.16); }
     .before-after { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; }
     .ba-card h4 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--text); } .ba-card p { margin: 0; font-size: 0.98rem; }
     .synthesis-map { display: grid; gap: 0.75rem; max-width: 640px; margin: 2rem auto 0; }
-    .synth-item { border: 1px solid var(--line); border-radius: 18px; padding: 0.9rem 1rem; background: rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-    .arrow { color: var(--accent-2); font-weight: 900; }
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 700ms ease, transform 700ms ease; }
+    .synth-item { border: 1px solid var(--line); border-radius: 18px; padding: 0.9rem 1rem; background: var(--panel); display: flex; justify-content: space-between; align-items: center; gap: 1rem; box-shadow: var(--shadow); }
+    .arrow { color: var(--primary); font-weight: 800; }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 850ms ease, transform 850ms ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     footer { padding: 2rem 1.25rem 4rem; color: var(--muted); text-align: center; border-top: 1px solid var(--line); }
     @media (max-width: 900px) { .hero-grid, .two-col, .before-after { grid-template-columns: 1fr; } .builder, .agent-loop, .role-grid, .trainer-grid { grid-template-columns: repeat(2, 1fr); } .nav-links { display: none; } }
-    @media (max-width: 560px) { section { padding: 5rem 1rem; } .builder, .agent-loop, .role-grid, .trainer-grid { grid-template-columns: 1fr; } .hero-card { min-height: 300px; } .orb { width: 190px; height: 190px; } }
+    @media (max-width: 560px) { section { padding: 5.5rem 1rem; } .builder, .agent-loop, .role-grid, .trainer-grid { grid-template-columns: 1fr; } .hero-card { min-height: 300px; } .constellation { inset: 1.5rem; } .constellation-note { font-size: 1rem; right: 1.2rem; bottom: 1.1rem; } }
   </style>
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
   <nav class="site-nav" aria-label="Experience navigation"><div class="nav-inner"><div class="brand"><span class="brand-mark" aria-hidden="true"></span>Inside AI</div><div class="nav-links"><a href="#layers">Layers</a><a href="#learning">Learning</a><a href="#language">LLMs</a><a href="#systems">Systems</a><a href="#agents">Agents</a><a href="#work">Your Work</a></div></div></nav>
   <main id="main">
-    <section class="hero" id="top"><div class="section-inner hero-grid"><div class="reveal"><div class="eyebrow">Interactive learning experience</div><h1>AI feels intelligent.</h1><p class="lead">But underneath the magic is a chain of systems: patterns, predictions, context, tools, and loops of action.</p><p>Scroll through a narrative journey from basic machine learning to modern AI agents, and leave with a clearer sense of what AI is, how it works, and what changes for people because of it.</p><div class="scroll-cue" aria-hidden="true"><span class="mouse"></span><span>Scroll to begin</span></div></div><div class="hero-card reveal" aria-label="Animated abstract AI system"><div class="orbit"><span class="signal-dot"></span></div><div class="orbit"><span class="signal-dot"></span></div><div class="orbit"><span class="signal-dot"></span></div><div class="orb"></div></div></div></section>
+    <section class="hero" id="top"><div class="section-inner hero-grid"><div class="reveal"><div class="eyebrow">Interactive learning experience</div><h1>AI feels intelligent.</h1><p class="lead">But underneath the magic is a chain of systems: patterns, predictions, context, tools, and loops of action.</p><p>Scroll through a narrative journey from basic machine learning to modern AI agents, and leave with a clearer sense of what AI is, how it works, and what changes for people because of it.</p><div class="scroll-cue" aria-hidden="true"><span class="mouse"></span><span>Scroll to begin</span></div></div><div class="hero-card reveal" aria-label="Animated constellation showing relationships between AI concepts"><div class="constellation"><span class="constellation-line"></span><span class="constellation-line"></span><span class="constellation-line"></span><span class="constellation-line"></span><span class="star-dot"></span><span class="star-dot"></span><span class="star-dot"></span><span class="star-dot"></span><span class="star-dot"></span><span class="star-dot"></span><p class="constellation-note">Understanding emerges from connection.</p></div></div></div></section>
     <section id="layers"><div class="section-inner two-col"><div class="reveal"><div class="eyebrow">Act I — Orientation</div><h2>AI is not one thing. It is a stack of ideas.</h2><p>Most confusion starts when every system gets called “AI.” A clearer mental model starts with layers: broad field, learning approach, deep architecture, language model, and tool-using systems.</p></div><div class="glass reveal"><div class="layer-stack"><button class="layer-btn active" data-layer="ai"><strong>Artificial Intelligence</strong><span>Software that performs tasks associated with human intelligence.</span></button><button class="layer-btn" data-layer="ml"><strong>Machine Learning</strong><span>Systems that learn patterns from data instead of following only explicit rules.</span></button><button class="layer-btn" data-layer="dl"><strong>Deep Learning</strong><span>Machine learning using layered neural networks to learn complex representations.</span></button><button class="layer-btn" data-layer="llm"><strong>Large Language Models</strong><span>Deep learning systems trained to predict and generate language token by token.</span></button><button class="layer-btn" data-layer="agents"><strong>Agents</strong><span>AI systems that can observe, reason, use tools, act, and iterate toward a goal.</span></button></div><div class="explain-box" aria-live="polite"><h3 id="layer-title">Artificial Intelligence</h3><p id="layer-copy">AI is the broad umbrella. It includes many kinds of systems, from recommendation engines to image generators to language assistants.</p><div class="pill-row" id="layer-pills"><span class="pill">umbrella concept</span><span class="pill">decision support</span><span class="pill">automation</span></div></div></div></div></section>
     <section id="learning"><div class="section-inner two-col"><div class="glass reveal"><h3>Train the tiny model</h3><p>Click examples that look like “streaming behavior.” Each label gives the model more signal. It is not being programmed with rules. It is learning from examples.</p><div class="trainer-grid"><button class="train-card" data-good="true">📺</button><button class="train-card" data-good="false">🛒</button><button class="train-card" data-good="true">🎬</button><button class="train-card" data-good="false">🌦️</button></div><div class="meter"><div class="meter-fill" id="accuracyFill"></div></div><div class="small-label" id="accuracyText">Model confidence: 18%</div></div><div class="reveal"><div class="eyebrow">Act II — Pattern learning</div><h2>Machine learning means the system learns from examples.</h2><p>A traditional program follows instructions. A machine learning system looks across many examples, detects patterns, and uses those patterns to make predictions on new data.</p><p>That is the core shift: from writing every rule by hand to creating systems that infer patterns from data.</p></div></div></section>
     <section id="neural-networks"><div class="section-inner two-col"><div class="reveal"><div class="eyebrow">Act III — Deep learning</div><h2>Neural networks learn by making tiny adjustments.</h2><p>A deep learning model transforms inputs through layers. During training, it compares predictions to correct answers, measures the error, and adjusts internal weights again and again.</p><p>Learning is not a flash of insight. It is millions or billions of small numerical updates.</p></div><div class="glass reveal"><div class="network"><div class="node-col"><div class="node"></div><div class="node"></div></div><div class="node-col"><div class="node"></div><div class="node"></div><div class="node"></div></div><div class="node-col"><div class="node"></div></div></div><div class="controls"><div class="control"><label for="signalRange"><span>Signal strength</span><span id="signalVal">52</span></label><input id="signalRange" type="range" min="0" max="100" value="52" /></div><div class="control"><label for="noiseRange"><span>Noise</span><span id="noiseVal">28</span></label><input id="noiseRange" type="range" min="0" max="100" value="28" /></div></div><div class="prediction" id="networkPrediction">Prediction confidence: 62%. The model is finding a useful pattern, but noise still affects reliability.</div></div></div></section>
     <section id="transformers"><div class="section-inner two-col"><div class="glass reveal"><h3>Click a word to see attention</h3><p>Self-attention helps a model decide which other words matter for interpreting the current word.</p><div class="sentence"><button class="word" data-word="The">The</button><button class="word" data-word="animal">animal</button><button class="word" data-word="didn’t">didn’t</button><button class="word" data-word="cross">cross</button><button class="word" data-word="street">street</button><button class="word active" data-word="it">it</button><button class="word" data-word="was">was</button><button class="word" data-word="tired">tired</button></div><div class="attention-output" id="attentionOutput">For “it,” the model should pay more attention to “animal” than “street.” Attention helps preserve relationships across the sentence.</div></div><div class="reveal"><div class="eyebrow">Act IV — The transformer shift</div><h2>Transformers changed AI by letting every token look at every other token.</h2><p>Older sequential models processed words one at a time. Transformers process sequences in parallel and use attention to track relationships. That made it possible to scale language systems dramatically.</p></div></div></section>
     <section id="language"><div class="section-inner two-col"><div class="reveal"><div class="eyebrow">Act V — Language models</div><h2>LLMs generate language by predicting what comes next.</h2><p>A language model does not retrieve a fixed answer from a drawer. It uses patterns learned during training and context from your prompt to predict likely next tokens, one step at a time.</p></div><div class="glass reveal token-box"><h3>Next-token prediction</h3><label class="small-label" for="promptInput">Try a starting phrase</label><input class="prompt-input" id="promptInput" value="The project risk is" /><div class="token-suggestions" id="tokenSuggestions" aria-live="polite"></div></div></div></section>
     <section id="systems"><div class="section-inner"><div class="reveal"><div class="eyebrow">Act VI — Memory and hands</div><h2>Raw LLMs are powerful, but modern AI systems add context, tools, and guardrails.</h2><p>Think of the model as the language engine. RAG gives it a library. MCP and tool use give it safe ways to connect with systems. A harness wraps the model with instructions, memory, permissions, and workflow logic.</p></div><div class="builder reveal"><button class="builder-card" data-system="rag"><strong>RAG</strong><p>Connects the model to relevant documents and data before it answers.</p></button><button class="builder-card" data-system="mcp"><strong>MCP</strong><p>Standardizes how AI clients connect to external tools and data sources.</p></button><button class="builder-card" data-system="tools"><strong>Tool Use</strong><p>Lets the system take specific actions like searching, summarizing, or updating records.</p></button><button class="builder-card" data-system="harness"><strong>Harness</strong><p>Wraps the model with instructions, permissions, memory, routing, and safety checks.</p></button></div><div class="system-status reveal" id="systemStatus" aria-live="polite">Select system pieces to see how capability grows.</div></div></section>
-    <section id="agents"><div class="section-inner"><div class="reveal"><div class="eyebrow">Act VII — Agency</div><h2>An agent is not just a chat response. It is a loop.</h2><p>Agents observe a situation, reason about what to do, use tools, evaluate results, and continue iterating until they reach a goal or hit a boundary.</p></div><div class="agent-loop reveal"><div class="loop-step active"><div class="loop-num">1</div><strong>Observe</strong><p>Read the request and gather context.</p></div><div class="loop-step"><div class="loop-num">2</div><strong>Plan</strong><p>Decide which action or tool should come next.</p></div><div class="loop-step"><div class="loop-num">3</div><strong>Act</strong><p>Use a tool, search, draft, summarize, or update.</p></div><div class="loop-step"><div class="loop-num">4</div><strong>Evaluate</strong><p>Check whether the output is good enough or needs another loop.</p></div></div><div class="btn-row reveal"><button class="button primary" id="runAgent">Run the loop</button><button class="button" id="resetAgent">Reset</button></div></div></section>
+    <section id="agents"><div class="section-inner"><div class="reveal"><div class="eyebrow">Act VII — Agency</div><h2>An agent is not just a chat response. It is a loop.</h2><p>Agents observe a situation, reason about what to do, use tools, evaluate results, and continue iterating until they reach a goal or hit a boundary.</p></div><div class="agent-loop reveal"><div class="loop-step active"><div class="loop-num">1</div><strong>Observe</strong><p>Read the request and gather context.</p></div><div class="loop-step"><div class="loop-num">2</div><strong>Plan</strong><p>Decide which action or tool should come next.</p></div><div class="loop-step"><div class="loop-num">3</div><strong>Act</strong><p>Use a tool, search, draft, summarize, or update.</p></div><div class="loop-step"><div class="loop-num">4</div><strong>Evaluate</strong><p>Check whether the output is good enough or needs another loop.</p></div></div><div class="btn-row reveal"><button class="button primary" id="runAgent">Watch It Think</button><button class="button" id="resetAgent">Reset View</button></div></div></section>
     <section id="work"><div class="section-inner"><div class="reveal"><div class="eyebrow">Act VIII — What changes for me?</div><h2>AI changes where human judgment shows up.</h2><p>The shift is not simply from “human work” to “machine work.” The shift is from manual execution toward direction, supervision, validation, refinement, and decision-making.</p></div><div class="role-grid reveal"><button class="role-card active" data-role="designer"><strong>Designer</strong><p>Prototype faster and refine with taste.</p></button><button class="role-card" data-role="manager"><strong>Manager</strong><p>Clarify, coach, and reduce friction.</p></button><button class="role-card" data-role="analyst"><strong>Analyst</strong><p>Interpret uncertainty and pressure-test claims.</p></button><button class="role-card" data-role="marketer"><strong>Marketer</strong><p>Generate options and validate fit.</p></button></div><div class="before-after reveal" id="beforeAfter" aria-live="polite"></div></div></section>
-    <section id="synthesis"><div class="section-inner" style="text-align:center;"><div class="reveal"><div class="eyebrow">Synthesis</div><h2>Now the pieces connect.</h2><p class="lead" style="margin-left:auto;margin-right:auto;">AI is not magic. It is a layered system that learns patterns, predicts language, uses context, connects to tools, and sometimes acts through loops.</p></div><div class="synthesis-map reveal"><div class="synth-item"><span>AI</span><span class="arrow">broad field</span></div><div class="synth-item"><span>Machine Learning</span><span class="arrow">learns patterns</span></div><div class="synth-item"><span>Deep Learning</span><span class="arrow">uses layered networks</span></div><div class="synth-item"><span>LLMs</span><span class="arrow">predict tokens</span></div><div class="synth-item"><span>RAG + MCP + Tools</span><span class="arrow">add context and action</span></div><div class="synth-item"><span>Agents</span><span class="arrow">loop toward goals</span></div></div><div class="btn-row reveal" style="justify-content:center;"><a class="button primary" href="../index.html">Return to Portfolio</a><a class="button" href="#top">Replay Experience</a></div></div></section>
+    <section id="synthesis"><div class="section-inner" style="text-align:center;"><div class="reveal"><div class="eyebrow">Synthesis</div><h2>Now the pieces connect.</h2><p class="lead" style="margin-left:auto;margin-right:auto;">AI is not magic. It is a layered system that learns patterns, predicts language, uses context, connects to tools, and sometimes acts through loops.</p></div><div class="synthesis-map reveal"><div class="synth-item"><span>AI</span><span class="arrow">broad field</span></div><div class="synth-item"><span>Machine Learning</span><span class="arrow">learns patterns</span></div><div class="synth-item"><span>Deep Learning</span><span class="arrow">uses layered networks</span></div><div class="synth-item"><span>LLMs</span><span class="arrow">predict tokens</span></div><div class="synth-item"><span>RAG + MCP + Tools</span><span class="arrow">add context and action</span></div><div class="synth-item"><span>Agents</span><span class="arrow">loop toward goals</span></div></div><div class="btn-row reveal" style="justify-content:center;"><a class="button primary" href="../index.html">Back to Portfolio</a><a class="button" href="#top">Explore Again</a></div></div></section>
   </main>
   <footer><p style="margin:0 auto; font-size:0.95rem;">Designed as a single-page interactive learning experience using HTML, CSS, and vanilla JavaScript.</p></footer>
   <script>
