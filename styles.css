@@ -385,6 +385,39 @@ h3 {
   color: var(--ink-muted);
 }
 
+.sample-section {
+  padding-top: 0;
+}
+
+.sample-card {
+  max-width: 860px;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.sample-card h2 {
+  max-width: 760px;
+}
+
+.sample-card p:not(.eyebrow) {
+  max-width: 760px;
+  color: var(--ink-muted);
+  font-size: 1.08rem;
+}
+
+.sample-card .sample-lead {
+  margin-top: 1rem;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+}
+
+.sample-card .button {
+  margin-top: 1rem;
+}
+
 .section-muted {
   max-width: none;
   background: var(--surface-muted);
