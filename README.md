@@ -1,19 +1,21 @@
-# Allister Willems — Combined Portfolio
+# Allister Willems: Combined Portfolio
 
 One site merging the strategy portfolio (case studies, positioning, career arc)
-with the visual portfolio (14 projects of video, animation, and instructional
+with the visual portfolio (15 projects of video, animation, and instructional
 graphics). Fresh hybrid design: warm cream + deep green with an editorial
 serif (Fraunces) and Inter.
 
 ## Structure
 
-- `index.html` — hero, What I Do, 5 featured case studies, Visual Work teaser,
+- `index.html`: hero, What I Do, 5 featured case studies, Visual Work teaser,
   Interactive Sample, About + Selected Signals, Career Arc, Contact
-- `case-studies/` — 5 case study pages, each with a "Related Visual Work" section
-- `work/index.html` — full 14-project gallery
-- `work/*.html` — project pages, each linking back to its related case study
-- `example/sample.html` — the interactive "Making AI Understandable" sample
+- `case-studies/`: 5 case study pages, each with a "Related Visual Work" section
+- `work/index.html`: full 15-project gallery
+- `work/*.html`: project pages, each linking back to its related case study
+- `example/sample.html`: the interactive "Making AI Understandable" sample
   (self-contained, included locally)
+- `kaiser-permanente.html`: role-focused landing page connecting healthcare,
+  software application training, technical enablement, and selected proof of work
 
 ## Deploying to GitHub Pages
 
@@ -32,3 +34,5 @@ serif (Fraunces) and Inter.
 - Old case-study URLs are preserved (`case-studies/<same-slugs>.html`), so
   existing links keep working.
 - Contact is email + LinkedIn (no form backend needed on GitHub Pages).
+- The Enterprise AI case study includes public-safe reconstructed excerpts rather
+  than raw internal documents. The 2026 strategy is labeled as proposed work.
