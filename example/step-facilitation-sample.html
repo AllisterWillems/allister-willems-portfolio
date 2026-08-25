@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.T.E.P. | Interactive Facilitation Sample</title>
+<meta name="description" content="A public-safe interactive facilitation sample demonstrating scenario-based practice, multimedia, feedback, and teach-back in a ten-minute healthcare learning session.">
+<style>
+  :root{
+    --bg:#07090d;
+    --panel:#0b0f16;
+    --card:#111826;
+    --line:#1d2736;
+    --ink:#e9edf3;
+    --dim:#8b94a3;
+    --faint:#5b6472;
+    --accent:#2dd4bf;
+    --danger:#f87171;
+    --ok:#4ade80;
+    --amber:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg)}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  #deck{
+    transition:transform .75s cubic-bezier(.77,0,.18,1);
+    will-change:transform;
+  }
+  .panel{
+    height:100vh;
+    padding:5vh 7vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    overflow:auto;
+  }
+  .kicker{
+    font-size:.8rem;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:1.4rem;
+    font-weight:600;
+  }
+  .hero{
+    font-size:clamp(2.6rem,7vw,6rem);
+    font-weight:800;
+    line-height:1.04;
+    letter-spacing:-.02em;
+  }
+  .sub{
+    font-size:clamp(1.05rem,1.8vw,1.45rem);
+    color:var(--dim);
+    max-width:46ch;
+    line-height:1.55;
+    margin-top:1.6rem;
+  }
+  .sub strong{color:var(--ink);font-weight:600}
+  .stepword{
+    font-size:clamp(4rem,12vw,10rem);
+    font-weight:900;
+    letter-spacing:-.03em;
+    line-height:1;
+    background:linear-gradient(180deg,var(--ink) 60%,var(--dim));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .stepnum{
+    font-size:.85rem;letter-spacing:.3em;color:var(--faint);
+    text-transform:uppercase;margin-bottom:1rem;font-weight:600;
+  }
+  .stepline{
+    font-size:clamp(1.3rem,2.6vw,2rem);
+    font-weight:600;margin-top:2rem;max-width:30ch;line-height:1.35;
+  }
+  .stepsub{color:var(--dim);font-size:clamp(1rem,1.6vw,1.3rem);margin-top:1rem;max-width:44ch;line-height:1.55}
+
+  /* ---------- big staircase (orientation + teach-back) ---------- */
+  .stair{
+    margin-top:3rem;
+    display:flex;flex-direction:column;gap:.55rem;
+  }
+  .tread{
+    display:flex;align-items:center;gap:1.1rem;
+    padding:.85rem 1.4rem;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    border-radius:10px;
+    width:min(560px,80vw);
+  }
+  .tread:nth-child(2){margin-left:clamp(1rem,4vw,3.5rem)}
+  .tread:nth-child(3){margin-left:clamp(2rem,8vw,7rem)}
+  .tread:nth-child(4){margin-left:clamp(3rem,12vw,10.5rem)}
+  .tread b{
+    font-size:1.5rem;font-weight:800;color:var(--accent);
+    width:1.4em;
+  }
+  .tread .tw{font-size:1.25rem;font-weight:700;letter-spacing:.02em}
+  .tread .td{color:var(--dim);font-size:.95rem;margin-left:auto;text-align:right;max-width:24ch}
+
+  /* ---------- persistent mini staircase ---------- */
+  #mini{
+    position:fixed;right:22px;bottom:22px;z-index:50;
+    display:flex;flex-direction:column;gap:4px;
+    opacity:.95;pointer-events:none;
+  }
+  #mini .m{
+    width:20px;height:14px;border-radius:3px;
+    background:var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:800;color:var(--faint);
+    transition:all .4s ease;
+  }
+  #mini .m:nth-child(2){margin-left:10px}
+  #mini .m:nth-child(3){margin-left:20px}
+  #mini .m:nth-child(4){margin-left:30px}
+  #mini .m.active{background:var(--accent);color:#042521;transform:scale(1.25)}
+  #mini .m.done{background:#155e56;color:#9ef0e6}
+
+  /* ---------- scenarios ---------- */
+  .scen{
+    display:grid;
+    grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+    gap:clamp(1.2rem,3vw,3rem);
+    align-items:start;
+    margin-top:2rem;
+  }
+  @media (max-width:900px){.scen{grid-template-columns:1fr}}
+  .scen-h{font-size:clamp(1.5rem,3vw,2.4rem);font-weight:800;letter-spacing:-.01em}
+  .scen-s{color:var(--dim);margin-top:.5rem;font-size:1.05rem}
+
+  .mock{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    font-size:clamp(.92rem,1.35vw,1.08rem);
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+  .mock-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:.6rem .9rem;border-bottom:1px solid var(--line);
+    background:#0d1420;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;background:#232f42}
+  .mock-bar span{color:var(--faint);font-size:.78rem;letter-spacing:.08em;margin-left:6px;text-transform:uppercase}
+  .mock-meta{padding:1rem 1.2rem .4rem;border-bottom:1px solid var(--line)}
+  .mrow{display:flex;gap:.6rem;padding:.18rem 0;line-height:1.45}
+  .mrow .lbl{color:var(--faint);min-width:4.2em;font-size:.9em}
+  .mock-body{padding:1.1rem 1.2rem 1.3rem;line-height:1.65;color:#cdd5e0}
+  .mock-body p{margin-bottom:.85rem}
+  .sig{color:var(--dim)}
+
+  /* tells */
+  .tell{
+    cursor:pointer;border-radius:4px;padding:0 3px;
+    border-bottom:1px dashed rgba(139,148,163,.35);
+    transition:all .3s ease;
+  }
+  .tell:hover{border-bottom-color:var(--dim)}
+  .tell.on{background:rgba(248,113,113,.16);border-bottom:1px solid var(--danger);color:#ffd9d9}
+  .tell.good.on{background:rgba(74,222,128,.14);border-bottom:1px solid var(--ok);color:#d3f8de}
+
+  .mlink{color:#7dd3fc;text-decoration:underline;position:relative}
+  .mlink:hover::after{
+    content:attr(data-href);
+    position:absolute;left:0;top:1.7em;
+    background:#000;color:var(--amber);
+    border:1px solid var(--line);
+    padding:.35em .6em;border-radius:6px;
+    font-size:.82em;white-space:nowrap;z-index:5;
+  }
+
+  /* findings column */
+  .findings{display:flex;flex-direction:column;gap:.7rem}
+  .findings h4{
+    font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--faint);font-weight:600;margin-bottom:.3rem;
+  }
+  .finding{
+    opacity:0;transform:translateY(10px);
+    transition:all .45s cubic-bezier(.2,.8,.2,1);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--danger);
+    border-radius:10px;
+    padding:.8rem 1rem;
+    pointer-events:none;
+  }
+  .finding.good{border-left-color:var(--ok)}
+  .finding.on{opacity:1;transform:none}
+  .finding b{display:block;font-size:.95rem;margin-bottom:.2rem}
+  .finding span{color:var(--dim);font-size:.88rem;line-height:1.45;display:block}
+  .fhint{color:var(--faint);font-size:.85rem;font-style:italic}
+
+  /* voicemail */
+  .vm-head{padding:1rem 1.2rem;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:1rem}
+  .vm-ic{
+    width:42px;height:42px;border-radius:50%;
+    background:#16324d;display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;
+  }
+  .vm-id{font-weight:700}
+  .vm-num{color:var(--dim);font-size:.9rem}
+  .vm-time{margin-left:auto;color:var(--faint);font-size:.85rem;text-align:right}
+  .wave{display:flex;align-items:center;gap:3px;padding:1rem 1.2rem .2rem}
+  .wave i{width:3px;border-radius:2px;background:#22405e;display:block}
+  .vm-audio{
+    padding:.75rem 1.2rem .35rem;
+    border-top:1px solid rgba(29,39,54,.65);
+  }
+  .vm-audio audio{
+    width:100%;
+    height:34px;
+    display:block;
+    filter:invert(1) hue-rotate(180deg) saturate(.8);
+    opacity:.9;
+  }
+  .transcript-lbl{padding:.9rem 1.2rem .2rem;color:var(--faint);font-size:.75rem;letter-spacing:.25em;text-transform:uppercase}
+
+  /* recap / close */
+  .recap{margin-top:2.4rem;display:flex;flex-direction:column;gap:1.05rem}
+  .recap div{display:flex;gap:1rem;align-items:baseline;font-size:clamp(1.05rem,1.9vw,1.45rem)}
+  .recap b{color:var(--accent);font-weight:800;min-width:6.2em;letter-spacing:.02em}
+  .recap span{color:var(--dim)}
+  /* nav hint + controls */
+  .hint{
+    position:absolute;bottom:4.5vh;left:7vw;
+    color:var(--faint);font-size:.85rem;letter-spacing:.05em;
+    display:flex;align-items:center;gap:.6rem;
+    animation:bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  .hint kbd{
+    border:1px solid var(--line);border-radius:5px;padding:.15em .5em;
+    background:var(--card);font-size:.8rem;color:var(--dim);
+  }
+  #counter{
+    position:fixed;left:22px;bottom:22px;z-index:50;
+    color:var(--faint);font-size:.75rem;letter-spacing:.2em;
+  }
+  .divider{height:1px;background:var(--line);margin:2rem 0;width:min(560px,80vw)}
+  .objective{
+    margin-top:2rem;padding:1.2rem 1.5rem;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    max-width:62ch;font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.55;
+  }
+  .objective em{color:var(--accent);font-style:normal;font-weight:600}
+  .sample-note{
+    margin-top:1.5rem;max-width:66ch;color:var(--faint);
+    font-size:.82rem;line-height:1.5;
+  }
+  .embedded .hint,
+  .embedded #counter,
+  .embedded #mini,
+  .embedded .sample-note{display:none}
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- 1 · HOOK -->
+  <section class="panel" data-step="none">
+    <div class="kicker">Social engineering · in the age of AI</div>
+    <div class="hero">Typos and grammar<br>are not enough.</div>
+    <p class="sub">Generative AI can make phishing look polished. Voice cloning can make a call sound familiar. The old warning signs are less reliable, and healthcare is a high-value target.</p>
+    <p class="sample-note">Public-safe portfolio adaptation. All organization names, people, addresses, and messages in this learning scenario are fictional.</p>
+    <div class="hint"><kbd>↓</kbd> or click below to step down</div>
+  </section>
+
+  <!-- 2 · ORIENTATION -->
+  <section class="panel" data-step="all">
+    <div class="kicker">What survives AI is process</div>
+    <div class="hero" style="font-size:clamp(2rem,4.5vw,3.6rem)">Four steps. Any message.<br>Any channel.</div>
+    <div class="stair">
+      <div class="tread"><b>S</b><span class="tw">STOP</span><span class="td">Don't act inside the message</span></div>
+      <div class="tread"><b>T</b><span class="tw">THINK</span><span class="td">Name the ask, and the feeling</span></div>
+      <div class="tread"><b>E</b><span class="tw">EXAMINE</span><span class="td">Check what you can verify</span></div>
+      <div class="tread"><b>P</b><span class="tw">PROCEED</span><span class="td">Always end in an action</span></div>
+    </div>
+    <div class="objective">In the next ten minutes you'll be able to run <em>S.T.E.P.</em> on any suspicious contact (email, text, phone, or in person) <em>and teach it to someone else</em>.</div>
+  </section>
+
+  <!-- 3 · STOP -->
+  <section class="panel" data-step="0">
+    <div class="stepnum">Step 1 of 4</div>
+    <div class="stepword">STOP</div>
+    <div class="stepline">Don't act inside the message.</div>
+    <p class="stepsub">Hands off the link. Don't answer the ask. The message is engineered to be completed on reflex. <b>The pause is the intervention.</b></p>
+  </section>
+
+  <!-- 4 · THINK -->
+  <section class="panel" data-step="1">
+    <div class="stepnum">Step 2 of 4</div>
+    <div class="stepword">THINK</div>
+    <div class="stepline">Name two things:<br>What is it asking me to <em>do</em>?<br>What is it making me <em>feel</em>?</div>
+    <p class="stepsub">Urgency. Fear. Authority. Curiosity. Duty. <b>Pressure is data.</b> The feeling is the fingerprint of manipulation.</p>
+  </section>
+
+  <!-- 5 · EXAMINE -->
+  <section class="panel" data-step="2">
+    <div class="stepnum">Step 3 of 4</div>
+    <div class="stepword">EXAMINE</div>
+    <div class="stepline">Check what you can verify.</div>
+    <p class="stepsub">Email → the sender's real domain, the link's real destination.<br>Phone → can they prove who they are on a channel <b>you</b> control?<br><br>Two or three checks per channel. The <b>writing</b> can mislead. The <b>infrastructure</b> can be checked.</p>
+  </section>
+
+  <!-- 6 · PROCEED -->
+  <section class="panel" data-step="3">
+    <div class="stepnum">Step 4 of 4</div>
+    <div class="stepword">PROCEED</div>
+    <div class="stepline">Always end in an action.</div>
+    <p class="stepsub">Suspicious → <b>check through a trusted channel</b> and <b>report</b>.<br>Clean → carry on with your day.<br><br>The process never leaves you frozen, and it protects your time, too.</p>
+  </section>
+
+  <!-- 7 · SCENARIO 1 : EMAIL -->
+  <section class="panel" data-step="all">
+    <div>
+      <div class="kicker">Worked example · your inbox, 4:55 PM</div>
+      <div class="scen-h">Run the steps with me.</div>
+      <div class="scen">
+        <div class="mock">
+          <div class="mock-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Northstar Health Mail</span></div>
+          <div class="mock-meta">
+            <div class="mrow"><span class="lbl">From</span><span>Alex Morgan &lt;<span class="tell" data-f="f1a">a.morgan@northstar-health.org</span>&gt;</span></div>
+            <div class="mrow"><span class="lbl">Subject</span><span><b>Epic upgrade: revised go-live schedule for your unit</b></span></div>
+          </div>
+          <div class="mock-body">
+            <p>Hi,</p>
+            <p>Quick update: the Epic upgrade go-live schedule changed for your unit and I need trainers to <span class="tell" data-f="f1b">confirm availability by end of day</span> so I can finalize coverage.</p>
+            <p>Review the revised schedule here and confirm your slots:<br>
+            <span class="mlink tell" data-f="f1c" data-href="→ https://northstarhealth-scheduling.com/golive">Revised Go-Live Schedule</span></p>
+            <p class="sig">Thanks for turning this around quickly,<br>Alex Morgan<br>Clinical Informatics Education Manager</p>
+          </div>
+        </div>
+        <div class="findings">
+          <h4>Findings</h4>
+          <div class="finding" id="f1a"><b>Sender: unexpected variation</b><span>northstar-health.org ≠ northstarhealth.org. The display name looks familiar. The domain is a lookalike.</span></div>
+          <div class="finding" id="f1b"><b>Two levers, pulling toward fast</b><span>Deadline pressure plus helpfulness: "don't hold up the team." That feeling is the fingerprint.</span></div>
+          <div class="finding" id="f1c"><b>The link's real destination</b><span>Hover, don't click. An unfamiliar domain. The writing may look polished, but the infrastructure is still inspectable.</span></div>
+          <p class="fhint">Click a highlight in the email as we find each one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · SCENARIO 2 : VOICEMAIL -->
+  <section class="panel" data-step="all">
+    <div>
+      <div class="kicker">Your turn · new channel, same four steps</div>
+      <div class="scen-h">Voicemail, this morning, 7:42 AM.</div>
+      <div class="scen">
+        <div class="mock">
+          <div class="vm-head">
+            <div class="vm-ic">📞</div>
+            <div>
+              <div class="vm-id"><span class="tell" data-f="f2a">Meridian IT Help Desk</span></div>
+              <div class="vm-num">(503) 555-0187</div>
+            </div>
+            <div class="vm-time">Today<br>7:42 AM · 0:22</div>
+          </div>
+          <div class="wave" aria-hidden="true"></div>
+          <div class="vm-audio">
+            <audio controls preload="metadata" src="../assets/step-facilitation-voicemail.mp3" aria-label="Fictional voicemail from Meridian IT Help Desk"></audio>
+          </div>
+          <div class="transcript-lbl">Transcript</div>
+          <div class="mock-body">
+            <p>"Hi, this is Marcus from the IT Security team. We've flagged some unusual sign-in activity on your Epic account overnight, and we're temporarily suspending affected accounts before the day shift starts. I can keep yours active, but I need to verify you first. <span class="tell" data-f="f2b">Call me back at this number in the next twenty minutes</span>, or if it's easier, <span class="tell" data-f="f2c">just read me the six-digit code we're about to text you</span>. Sorry for the early call, just trying to get ahead of this <span class="tell" data-f="f2d">before it affects patient care</span>."</p>
+          </div>
+        </div>
+        <div class="findings">
+          <h4>Findings</h4>
+          <div class="finding" id="f2a"><b>Caller ID is spoofable</b><span>The name on the screen proves very little. Identity can be faked. Channel control is harder to fake.</span></div>
+          <div class="finding" id="f2b"><b>Their number, their window</b><span>A 20-minute deadline at 7:42 AM is engineered for pre-shift autopilot. Call back on the published help desk line, a channel you control.</span></div>
+          <div class="finding" id="f2c"><b>Never share a verification code</b><span>Legitimate support staff should not ask you to read back a sign-in code. That code may approve access to your account.</span></div>
+          <div class="finding" id="f2d"><b>The sixth lever: duty</b><span>"Before it affects patient care" weaponizes your values. In healthcare, that's the pressure signal.</span></div>
+          <p class="fhint">Walk it out loud: Stop, Think, Examine, Proceed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · SCENARIO 3 : LEGIT -->
+  <section class="panel" data-step="all">
+    <div>
+      <div class="kicker">Calibration · a legitimate message</div>
+      <div class="scen-h">Proceed sometimes means: carry on.</div>
+      <div class="scen">
+        <div class="mock">
+          <div class="mock-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Northstar Health Mail</span></div>
+          <div class="mock-meta">
+            <div class="mrow"><span class="lbl">From</span><span>HR Benefits &lt;<span class="tell good" data-f="f3a">benefits@northstarhealth.org</span>&gt;</span></div>
+            <div class="mrow"><span class="lbl">Subject</span><span><b>Open enrollment closes Friday</b></span></div>
+          </div>
+          <div class="mock-body">
+            <p>Hi Jordan,</p>
+            <p>A reminder that benefits open enrollment closes this Friday. <span class="tell good" data-f="f3b">If you've already made your elections, no action is needed.</span></p>
+            <p>To review or change your elections, <span class="tell good" data-f="f3c">log in through the employee portal as usual, or go directly to</span> <span class="mlink" data-href="→ https://benefits.northstarhealth.org">benefits.northstarhealth.org</span></p>
+            <p class="sig">Questions? Reply to this email or call the Benefits line at ext. 4400.<br><br>HR Benefits Team<br>Northstar Health</p>
+          </div>
+        </div>
+        <div class="findings">
+          <h4>Why it passes</h4>
+          <div class="finding good" id="f3a"><b>Expected organization domain</b><span>The address ends in northstarhealth.org, with no unfamiliar variation or lookalike.</span></div>
+          <div class="finding good" id="f3b"><b>It gives you an out</b><span>A deadline, but no threat. Legit messages often offer an exit. Attacks usually try to keep you inside their path.</span></div>
+          <div class="finding good" id="f3c"><b>It offers other channels</b><span>The portal "as usual," a phone extension. Safer messages give you alternatives to the link in front of you.</span></div>
+          <p class="fhint">False positives cost a hospital real time. The process protects that too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · TEACH-BACK -->
+  <section class="panel" data-step="all">
+    <div class="kicker">Teach-back</div>
+    <div class="hero" style="font-size:clamp(2.4rem,5.5vw,4.5rem)">Your turn.</div>
+    <p class="sub">Sixty seconds. A new hire. The nurses' station.<br><strong>Teach them S.T.E.P.</strong></p>
+    <div class="stair" style="margin-top:2.4rem">
+      <div class="tread"><b>S</b><span class="tw">STOP</span></div>
+      <div class="tread"><b>T</b><span class="tw">THINK</span></div>
+      <div class="tread"><b>E</b><span class="tw">EXAMINE</span></div>
+      <div class="tread"><b>P</b><span class="tw">PROCEED</span></div>
+    </div>
+  </section>
+
+  <!-- 11 · CLOSE -->
+  <section class="panel" data-step="all">
+    <div class="kicker">Fifteen seconds that protect a hospital</div>
+    <div class="hero" style="font-size:clamp(2rem,4.5vw,3.4rem)">Surface cues can shift.<br>The process still holds.</div>
+    <div class="recap">
+      <div><b>STOP</b><span>breaks the reflex.</span></div>
+      <div><b>THINK</b><span>names the pressure.</span></div>
+      <div><b>EXAMINE</b><span>checks what you can verify.</span></div>
+      <div><b>PROCEED</b><span>always ends in an action: check, report, or carry on.</span></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- persistent mini staircase -->
+<div id="mini" aria-hidden="true">
+  <div class="m">S</div><div class="m">T</div><div class="m">E</div><div class="m">P</div>
+</div>
+<div id="counter"></div>
+
+<script>
+(function(){
+  if(window.self !== window.top) document.documentElement.classList.add('embedded');
+  const deck = document.getElementById('deck');
+  const panels = Array.from(document.querySelectorAll('.panel'));
+  const minis = Array.from(document.querySelectorAll('#mini .m'));
+  const counter = document.getElementById('counter');
+  let idx = 0, animating = false;
+
+  // build waveform bars
+  const wave = document.querySelector('.wave');
+  if(wave){
+    for(let i=0;i<48;i++){
+      const bar = document.createElement('i');
+      bar.style.height = (6 + Math.abs(Math.sin(i*0.7))*22 + Math.random()*8) + 'px';
+      wave.appendChild(bar);
+    }
+  }
+
+  function render(){
+    deck.style.transform = 'translateY(-' + (idx*100) + 'vh)';
+    counter.textContent = (idx+1) + ' / ' + panels.length;
+    const step = panels[idx].dataset.step;
+    minis.forEach((m,i)=>{
+      m.classList.remove('active','done');
+      if(step === 'all'){ m.classList.add('done'); }
+      else if(step !== 'none'){
+        const s = parseInt(step,10);
+        if(i < s) m.classList.add('done');
+        if(i === s) m.classList.add('active');
+      }
+    });
+  }
+
+  function go(n){
+    if(animating) return;
+    const next = Math.max(0, Math.min(panels.length-1, n));
+    if(next === idx) return;
+    panels[idx].querySelectorAll('audio').forEach(a=>a.pause());
+    animating = true;
+    idx = next;
+    render();
+    setTimeout(()=>{ animating = false; }, 780);
+  }
+
+  // keyboard
+  window.addEventListener('keydown', (e)=>{
+    const interactive = e.target instanceof Element && e.target.closest('audio,button,input,select,textarea,[contenteditable="true"]');
+    if(interactive && [' ','Enter'].includes(e.key)) return;
+    if(['ArrowDown','PageDown',' ','Enter'].includes(e.key)){ e.preventDefault(); go(idx+1); }
+    else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(idx-1); }
+    else if(e.key === 'Home'){ e.preventDefault(); go(0); }
+    else if(e.key >= '1' && e.key <= '9'){
+      // toggle nth finding on current panel
+      const tells = panels[idx].querySelectorAll('.tell');
+      const t = tells[parseInt(e.key,10)-1];
+      if(t) toggleTell(t);
+    }
+    else if(e.key === '0'){
+      // reset current panel reveals
+      panels[idx].querySelectorAll('.tell.on').forEach(t=>t.classList.remove('on'));
+      panels[idx].querySelectorAll('.finding.on').forEach(f=>f.classList.remove('on'));
+    }
+  }, {passive:false});
+
+  // click: tells toggle; clicks on empty panel space advance
+  function toggleTell(t){
+    t.classList.toggle('on');
+    const f = document.getElementById(t.dataset.f);
+    if(f) f.classList.toggle('on', t.classList.contains('on'));
+  }
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('.tell');
+    if(t){ toggleTell(t); return; }
+    if(e.target.closest('.mock') || e.target.closest('.findings')) return;
+    go(idx+1);
+  });
+
+  // wheel/trackpad: gentle, debounced
+  let wheelLock = false;
+  window.addEventListener('wheel', (e)=>{
+    if(wheelLock) return;
+    const p = panels[idx];
+    // allow internal scroll if panel overflows
+    const canScroll = p.scrollHeight > p.clientHeight;
+    if(canScroll){
+      const atTop = p.scrollTop <= 0;
+      const atBottom = p.scrollTop + p.clientHeight >= p.scrollHeight - 2;
+      if((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) return;
+    }
+    if(Math.abs(e.deltaY) < 24) return;
+    wheelLock = true;
+    go(idx + (e.deltaY > 0 ? 1 : -1));
+    setTimeout(()=>{ wheelLock = false; }, 900);
+  }, {passive:true});
+
+  render();
+})();
+</script>
+</body>
+</html>
