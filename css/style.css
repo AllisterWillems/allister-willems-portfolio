@@ -327,6 +327,17 @@ img { max-width: 100%; display: block; }
 .facilitation-frame { overflow: hidden; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: 0 12px 30px rgba(28, 33, 30, .1); }
 .facilitation-frame iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 9px; background: #07090d; }
 .facilitation-frame > p { padding: 10px 8px 2px; color: var(--muted); font-size: 12px; text-align: center; }
+.learning-monitor-grid { display: grid; grid-template-columns: 1.25fr .85fr; gap: 48px; align-items: center; }
+.learning-monitor-preview { overflow: hidden; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: 0 12px 30px rgba(28, 33, 30, .1); }
+.learning-monitor-preview img { width: 100%; border-radius: 9px; border: 1px solid var(--line); }
+.learning-monitor-preview figcaption { padding: 10px 8px 2px; color: var(--muted); font-size: 12px; text-align: center; }
+.learning-monitor-copy h2 { margin-bottom: 18px; }
+.learning-monitor-copy > p { max-width: 660px; }
+.learning-monitor-points { margin: 24px 0; padding: 0; list-style: none; }
+.learning-monitor-points li { position: relative; margin: 12px 0; padding-left: 26px; font-size: 15px; }
+.learning-monitor-points li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.learning-monitor-points strong { color: var(--ink); }
+.learning-monitor-disclosure { padding-left: 16px; border-left: 3px solid var(--green); color: var(--muted); font-size: 13px; }
 .process-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 40px; }
 .process-step { padding: 20px 16px; border: 1px solid rgba(255, 255, 255, .2); border-radius: 10px; }
 .process-step span { display: block; margin-bottom: 8px; color: #9fd0ba; font-size: 12px; font-weight: 700; letter-spacing: .1em; }
@@ -419,6 +430,7 @@ img { max-width: 100%; display: block; }
   .process-row { grid-template-columns: repeat(2, 1fr); }
   .role-proof-grid { grid-template-columns: 1fr; }
   .facilitation-sample-grid { grid-template-columns: 1fr; }
+  .learning-monitor-grid { grid-template-columns: 1fr; }
   .video-proof-grid { grid-template-columns: 1fr; }
 
   .nav-toggle { display: block; }
